@@ -1,6 +1,7 @@
 using CoffeePalace.Data;
 using CoffeePalace.Models.Entities;
 using CoffeePalace.Services.Common;
+using CoffeePalace.Services.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -21,6 +22,9 @@ public class UserService : IUserService
     {
         try
         {
+            var validation = UserValidator.Validate(user);
+            if (!validation.Succeeded) return validation.Errors.First();
+            
             var result = await this.dbContext.Users.AddAsync(user);
             
             await this.dbContext.SaveChangesAsync();

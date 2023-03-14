@@ -1,6 +1,7 @@
 using CoffeePalace.Data;
 using CoffeePalace.Models.Entities;
 using CoffeePalace.Services.Common;
+using CoffeePalace.Services.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -21,6 +22,9 @@ public class ReviewService : IReviewService
     {
         try
         {
+            var validation = ReviewValidator.Validate(review);
+            if (!validation.Succeeded) return validation.Errors.First();
+            
             var result = await this.dbContext.Reviews.AddAsync(review);
             
             await this.dbContext.SaveChangesAsync();
@@ -38,6 +42,9 @@ public class ReviewService : IReviewService
     {
         try
         {
+            var validation = ReviewValidator.Validate(review);
+            if (!validation.Succeeded) return validation.Errors.First();
+            
             var old = await this.dbContext.Reviews
                 .FirstOrDefaultAsync(x => x.Id == id);
 

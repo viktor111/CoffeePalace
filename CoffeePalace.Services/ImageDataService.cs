@@ -1,6 +1,7 @@
 using CoffeePalace.Data;
 using CoffeePalace.Models.Entities;
 using CoffeePalace.Services.Common;
+using CoffeePalace.Services.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -26,6 +27,9 @@ public class ImageDataService : IImageDataService
     {
         try
         {
+            var isValid = ImageDataValidator.Validate(imageData);
+            if (!isValid.Succeeded) return isValid.Errors.First();
+            
             var processedImage = await this.imageProcessingService.Process(imageData);
 
             if (!processedImage.Succeeded) return processedImage.Errors.First();
@@ -47,6 +51,9 @@ public class ImageDataService : IImageDataService
     {
         try
         {
+            var isValid = ImageDataValidator.Validate(imageData);
+            if (!isValid.Succeeded) return isValid.Errors.First();
+            
             var old = await this.dbContext.ImageDatas
                 .FirstOrDefaultAsync(x => x.Id == id);
 
