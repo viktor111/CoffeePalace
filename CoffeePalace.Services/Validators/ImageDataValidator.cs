@@ -5,12 +5,14 @@ using static CoffeePalace.Models.Constants.ImageDataConstants;
 
 namespace CoffeePalace.Services.Validators;
 
-public class ImageDataValidator
+public static class ImageDataValidator
 {
-    public Result Validate()
+    public static Result Validate(ImageData imageData)
     {
         try
         {
+            ValidateName(imageData.Name);
+            
             return Result.Success;
         }
         catch (Exception e)
@@ -19,7 +21,7 @@ public class ImageDataValidator
         }
     }
 
-    private void ValidateName(string name)
+    private static void ValidateName(string name)
     {
         var nameProp = nameof(ImageData.Name);
         

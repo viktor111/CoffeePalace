@@ -5,13 +5,13 @@ using static CoffeePalace.Models.Constants.ReviewConstants;
 
 namespace CoffeePalace.Services.Validators;
 
-public class ReviewValidator
+public static class ReviewValidator
 {
-    public Result Validate(Review review)
+    public static Result Validate(Review review)
     {
         try
         {
-            this.ValidateText(review.Text);
+            ValidateText(review.Text);
             
             return Result.Success;
         }
@@ -21,7 +21,7 @@ public class ReviewValidator
         }
     }
 
-    private void ValidateText(string text)
+    private static void ValidateText(string text)
     {
         var nameProp = nameof(Review.Text);
         
