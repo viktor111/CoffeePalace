@@ -43,9 +43,9 @@ public static class CoffeeProductValidator
         
         if (string.IsNullOrWhiteSpace(description)) 
             throw new Exception(ErrorMessageBuilder.NullWhiteSpaceOrEmpty(nameof(nameProp)));
-        if (description.Length < NameMinLen) 
+        if (description.Length < MinDescriptionLen) 
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MinDescriptionLen));
-        if (description.Length > NameMaxLen) 
+        if (description.Length > MaxDescriptionLen) 
             throw new Exception(ErrorMessageBuilder.MaxLen(nameProp, MaxDescriptionLen));
     }
     
@@ -67,7 +67,7 @@ public static class CoffeeProductValidator
 
         if (price < MinPrice) 
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, NameMinLen));
-        if (price > MinPrice) 
+        if (price > MaxPrice) 
             throw new Exception(ErrorMessageBuilder.MaxLen(nameProp, NameMaxLen));
     }
 }

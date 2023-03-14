@@ -81,7 +81,9 @@ public class CoffeeProductService : ICoffeeProductService
             if (product is null) return ErrorMessageBuilder.NotFound(nameof(CoffeeProduct));
         
             this.dbContext.Remove(product);
-        
+            
+            await this.dbContext.SaveChangesAsync();
+            
             return Result.Success;
         }
         catch (Exception e)
