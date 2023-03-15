@@ -23,6 +23,7 @@ public static class ServicesConfiguration
         serviceCollection.AddScoped<ITokenGeneratorService, TokenGeneratorService>();
         serviceCollection.AddScoped<ITokenStorageService, TokenStorageService>();
         serviceCollection.AddScoped<IImageProcessingService, ImageProcessingService>();
+        serviceCollection.AddScoped<ICountriesService, CountriesService>();
         
         return serviceCollection;
     }
