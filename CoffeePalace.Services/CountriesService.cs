@@ -7,9 +7,9 @@ public class CountriesService : ICountriesService
 {
     private readonly List<CountryDto> countries;
 
-    public CountriesService()
+    public CountriesService(string path)
     {
-        this.countries = JsonConvert.DeserializeObject<List<CountryDto>>(File.ReadAllText("Common/countries.json"))
+        this.countries = JsonConvert.DeserializeObject<List<CountryDto>>(File.ReadAllText(path))
                          ?? throw new Exception("Countries list is empty!");
     }
 

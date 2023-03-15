@@ -20,10 +20,4 @@
       <PackageReference Include="SixLabors.ImageSharp" Version="3.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="Common\countries.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>
