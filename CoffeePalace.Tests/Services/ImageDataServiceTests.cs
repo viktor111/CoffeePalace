@@ -106,8 +106,20 @@ public class ImageDataServiceTests
         };
         
         // Act
-        
-        
+        var saved = await imageDataService.Save(imageData);
+        var imagesBeforeDelete = await dbContext.ImageDatas.ToListAsync(); 
+        await imageDataService.Delete(saved.Data.Id);
+        var imagesAfterDelete = await dbContext.ImageDatas.ToListAsync();
+
         // Assert
+        imagesBeforeDelete
+            .Should()
+            .Contain(saved.Data)
+            .And
+            .HaveCountGreaterOrEqualTo(1);
+        
+        imagesAfterDelete
+            .Should()
+            .HaveCountLessThan(imagesBeforeDelete.Count);
     }
 }
