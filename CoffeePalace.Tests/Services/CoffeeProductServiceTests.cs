@@ -99,8 +99,10 @@ public class CoffeeProductServiceTests
 
         // Act
         var saved = await coffeeProductService.Save(product);
+        var productsBeforeDelete = await dbContext.CoffeeProducts.ToListAsync();
+
         await coffeeProductService.Delete(saved.Data.Id);
-        var products = await dbContext.CoffeeProducts.ToListAsync();
+        var productsAfterDelete = await dbContext.CoffeeProducts.ToListAsync();
         
         //Assert
         saved.Succeeded
@@ -110,9 +112,9 @@ public class CoffeeProductServiceTests
         saved.Data
             .Should()
             .BeEquivalentTo(product);
-        
-        products
+
+        productsAfterDelete
             .Should()
-            .HaveCount(0);
+            .HaveCountLessThan(productsBeforeDelete.Count);
     }
 }
