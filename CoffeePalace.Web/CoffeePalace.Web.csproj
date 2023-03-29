@@ -27,6 +27,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="wwwroot\countries.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Include="wwwroot\seed-image.jpeg" />
     </ItemGroup>
 

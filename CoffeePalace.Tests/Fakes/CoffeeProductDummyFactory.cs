@@ -3,6 +3,8 @@ using CoffeePalace.Models.Entities;
 using CoffeePalace.Models.Types;
 using FakeItEasy;
 
+using static CoffeePalace.Models.Constants.CoffeeProductConstants;
+
 namespace CoffeePalace.Tests.Fakes;
 
 public class CoffeeProductFakes
@@ -26,7 +28,7 @@ public class CoffeeProductFakes
                     Name = x.Commerce.ProductName(),
                     Price = x.Finance.Amount(),
                     CountryOfOrigin = x.Address.Country(),
-                    Description = x.Lorem.Sentence(20),
+                    Description = x.Random.String2(MinDescriptionLen, MaxDescriptionLen),
                     IsInStock = true,
                     RoastLevel = x.Random.Enum<RoastLevelType>(),
                     CaffeineContent = x.Random.Enum<CaffeineContentType>(),

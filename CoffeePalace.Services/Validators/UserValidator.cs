@@ -6,20 +6,20 @@ using static CoffeePalace.Models.Constants.UserConstants;
 
 namespace CoffeePalace.Services.Validators;
 
-public class UserValidator
+public static class UserValidator
 {
-    public Result Validate(User user)
+    public static Result Validate(User user)
     {
         try
         {
-            this.ValidateFirstName(user.FirstName);
-            this.ValidateLastName(user.LastName);
-            this.ValidateAddress(user.Address);
-            this.ValidateCity(user.City);
-            this.ValidateCountry(user.Country);
-            this.ValidatePhoneNumber(user.PhoneNumber);
-            this.ValidateEmail(user.Email);
-            this.ValidatePassword(user.Password);
+            ValidateFirstName(user.FirstName);
+            ValidateLastName(user.LastName);
+            ValidateAddress(user.Address);
+            ValidateCity(user.City);
+            ValidateCountry(user.Country);
+            ValidatePhoneNumber(user.PhoneNumber);
+            ValidateEmail(user.Email);
+            ValidatePassword(user.Password);
             
             return Result.Success;
         }
@@ -29,7 +29,7 @@ public class UserValidator
         }
     }
 
-    private void ValidateFirstName(string firstName)
+    private static void ValidateFirstName(string firstName)
     {
         var nameProp = nameof(User.FirstName);
 
@@ -41,7 +41,7 @@ public class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxFirstNameLen));
     }
 
-    private void ValidateLastName(string lastName)
+    private static void ValidateLastName(string lastName)
     {
         var nameProp = nameof(User.LastName);
 
@@ -53,7 +53,7 @@ public class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxLastnameLen));
     }
 
-    private void ValidateAddress(string address)
+    private static void ValidateAddress(string address)
     {
         var nameProp = nameof(User.Address);
 
@@ -65,7 +65,7 @@ public class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxAddressLen));
     }
 
-    private void ValidateCountry(string country)
+    private static void ValidateCountry(string country)
     {
         var nameProp = nameof(User.Country);
 
@@ -82,7 +82,7 @@ public class UserValidator
             throw new Exception(ErrorMessageBuilder.NotFound(nameProp));
     }
 
-    private void ValidateCity(string city)
+    private static void ValidateCity(string city)
     {
         var nameProp = nameof(User.City);
 
@@ -94,7 +94,7 @@ public class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxCityLen));
     }
 
-    private void ValidatePhoneNumber(string phoneNumber)
+    private static void ValidatePhoneNumber(string phoneNumber)
     {
         var nameProp = nameof(User.PhoneNumber);
 
@@ -106,7 +106,7 @@ public class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxPhoneNumberLen));
     }
 
-    private void ValidateEmail(string email)
+    private static void ValidateEmail(string email)
     {
         var nameProp = nameof(User.Email);
 
@@ -118,7 +118,7 @@ public class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxEmailLen));
     }
 
-    private void ValidatePassword(string password)
+    private static void ValidatePassword(string password)
     {
         var nameProp = nameof(User.Password);
 
