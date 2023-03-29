@@ -64,6 +64,16 @@ public static class ErrorMessageBuilder
         return $"{name} error during getting results: {message}";
     }
 
+    public static string Get(string name)
+    {
+        return $"{name} error during getting one result";
+    }
+
+    public static string Get(string name, string message)
+    {
+        return $"{name} error during getting one result: {message}";
+    }
+
     public static string NullWhiteSpaceOrEmpty(string name)
     {
         return $"{name} cannot be null, whitespace or empty";

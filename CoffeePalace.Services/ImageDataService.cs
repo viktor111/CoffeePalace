@@ -115,4 +115,40 @@ public class ImageDataService : IImageDataService
             return ErrorMessageBuilder.All(nameof(ImageData));
         }
     }
+
+    public async Task<Result<ImageData>> GetById(string id)
+    {
+        try
+        {
+            var imageData = await this.dbContext.ImageDatas.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (imageData == null)
+                return ErrorMessageBuilder.Get(nameof(ImageData));
+
+            return imageData;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("{@e}", e);
+            return ErrorMessageBuilder.Get(nameof(ImageData));
+        }
+    }
+
+    public async Task<Result<ImageData>> GetByExternalId(string externalId)
+    {
+        try
+        {
+            var imageData = await this.dbContext.ImageDatas.FirstOrDefaultAsync(x => x.ExternalId == externalId);
+
+            if (imageData == null)
+                return ErrorMessageBuilder.Get(nameof(ImageData));
+
+            return imageData;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("{@e}", e);
+            return ErrorMessageBuilder.Get(nameof(ImageData));
+        }
+    }
 }

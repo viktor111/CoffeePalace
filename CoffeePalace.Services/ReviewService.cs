@@ -102,4 +102,22 @@ public class ReviewService : IReviewService
             return ErrorMessageBuilder.All(nameof(Review));
         }
     }
+
+    public async Task<Result<Review>> GetById(string id)
+    {
+        try
+        {
+            var review = await this.dbContext.Reviews.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (review == null)
+                return ErrorMessageBuilder.Get(nameof(Review));
+
+            return review;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("{@e}", e);
+            return ErrorMessageBuilder.Get(nameof(Review));
+        }
+    }
 }

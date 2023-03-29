@@ -12,4 +12,6 @@ public interface IReviewService
     public Task<Result> Delete(string id);
     
     public Task<Result<IEnumerable<Review>>> All();
+
+    public Task<Result<Review>> GetById(string id);
 }

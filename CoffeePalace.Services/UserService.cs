@@ -104,4 +104,22 @@ public class UserService : IUserService
             return ErrorMessageBuilder.All(nameof(User));
         }
     }
+
+    public async Task<Result<User>> GetById(string id)
+    {
+        try
+        {
+            var users = await this.dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (users == null)
+                return ErrorMessageBuilder.Get(nameof(User));
+
+            return users;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("{@e}", e);
+            return ErrorMessageBuilder.Get(nameof(User));
+        }
+    }
 }

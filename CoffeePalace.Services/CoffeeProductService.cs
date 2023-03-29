@@ -106,4 +106,22 @@ public class CoffeeProductService : ICoffeeProductService
             return ErrorMessageBuilder.All(nameof(CoffeeProduct));
         }
     }
+
+    public async Task<Result<CoffeeProduct>> GetById(string id)
+    {
+        try
+        {
+            var coffeeProduct = await this.dbContext.CoffeeProducts.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (coffeeProduct == null)
+                return ErrorMessageBuilder.Get(nameof(CoffeeProduct));
+
+            return coffeeProduct;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("{@e}", e);
+            return ErrorMessageBuilder.Get(nameof(CoffeeProduct));
+        }
+    }
 }
