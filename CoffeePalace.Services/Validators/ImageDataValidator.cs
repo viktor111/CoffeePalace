@@ -5,9 +5,9 @@ using static CoffeePalace.Models.Constants.ImageDataConstants;
 
 namespace CoffeePalace.Services.Validators;
 
-public static class ImageDataValidator
+public class ImageDataValidator : IValidator<ImageData>
 {
-    public static Result Validate(ImageData imageData)
+    public Result Validate(ImageData imageData)
     {
         try
         {
@@ -21,7 +21,7 @@ public static class ImageDataValidator
         }
     }
 
-    private static void ValidateName(string name)
+    private void ValidateName(string name)
     {
         var nameProp = nameof(ImageData.Name);
         

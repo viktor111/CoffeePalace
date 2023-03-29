@@ -1,6 +1,7 @@
 using CoffeePalace.Data;
 using CoffeePalace.Models.Entities;
 using CoffeePalace.Services;
+using CoffeePalace.Services.Common;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -26,9 +27,11 @@ public class UserServiceTests
         // Arrange
         using var dbContext = new ApplicationDbContext(options);
         var mockLogger = new Mock<ILogger<UserService>>();
-        var userService = new UserService(dbContext, mockLogger.Object);
+        var mockValidator = new Mock<IValidator<User>>();
+        var userService = new UserService(dbContext, mockLogger.Object, mockValidator.Object);
         var user = A.Dummy<User>();
-        
+        mockValidator.Setup(x => x.Validate(user)).Returns(Result.Success);
+
         // Act
         var saved = await userService.Save(user);
         var users = await dbContext.Users.ToListAsync();

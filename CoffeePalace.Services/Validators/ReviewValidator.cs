@@ -1,13 +1,13 @@
 using CoffeePalace.Models.Entities;
 using CoffeePalace.Services.Common;
-
+using Microsoft.AspNetCore.Hosting;
 using static CoffeePalace.Models.Constants.ReviewConstants;
 
 namespace CoffeePalace.Services.Validators;
 
-public static class ReviewValidator
+public class ReviewValidator : IValidator<Review>
 {
-    public static Result Validate(Review review)
+    public Result Validate(Review review)
     {
         try
         {
@@ -21,7 +21,7 @@ public static class ReviewValidator
         }
     }
 
-    private static void ValidateText(string text)
+    private void ValidateText(string text)
     {
         var nameProp = nameof(Review.Text);
         

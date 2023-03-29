@@ -11,18 +11,24 @@ public class CoffeeProductService : ICoffeeProductService
 {
     private readonly ApplicationDbContext dbContext;
     private readonly ILogger<CoffeeProductService> logger;
-    
-    public CoffeeProductService(ApplicationDbContext dbContext, ILogger<CoffeeProductService> logger)
+    private readonly IValidator<CoffeeProduct> coffeeProductValidator;
+
+    public CoffeeProductService(
+        ApplicationDbContext dbContext,
+        ILogger<CoffeeProductService> logger,
+        IValidator<CoffeeProduct> coffeeProductValidator
+        )
     {
         this.dbContext = dbContext;
         this.logger = logger;
+        this.coffeeProductValidator = coffeeProductValidator;
     }
 
     public async Task<Result<CoffeeProduct>> Save(CoffeeProduct coffeeProduct)
     {
         try
         {
-            var validation = CoffeeProductValidator.Validate(coffeeProduct);
+            var validation = this.coffeeProductValidator.Validate(coffeeProduct);
             if (!validation.Succeeded) return validation.Errors.First();
             
             var result = await this.dbContext.CoffeeProducts.AddAsync(coffeeProduct);
@@ -42,7 +48,7 @@ public class CoffeeProductService : ICoffeeProductService
     {
         try
         {
-            var validation = CoffeeProductValidator.Validate(coffeeProduct);
+            var validation = this.coffeeProductValidator.Validate(coffeeProduct);
             if (!validation.Succeeded) return validation.Errors.First();
             
             var old = await dbContext.CoffeeProducts

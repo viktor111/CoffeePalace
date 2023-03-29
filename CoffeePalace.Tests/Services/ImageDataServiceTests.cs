@@ -1,6 +1,7 @@
 using CoffeePalace.Data;
 using CoffeePalace.Models.Entities;
 using CoffeePalace.Services;
+using CoffeePalace.Services.Common;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,8 @@ public class ImageDataServiceTests
         using var dbContext = new ApplicationDbContext(options);
         var mockLogger = new Mock<ILogger<ImageDataService>>();
         var imageProcessingService = new ImageProcessingService();
-        var imageDataService = new ImageDataService(dbContext, mockLogger.Object, imageProcessingService);
+        var mockValidator = new Mock<IValidator<ImageData>>();
+        var imageDataService = new ImageDataService(dbContext, mockLogger.Object, imageProcessingService, mockValidator.Object);
         var imageName = Path.Combine(Directory.GetCurrentDirectory(), "Assets/seed-image.jpeg");
         var bytes = await File.ReadAllBytesAsync(imageName);
         var imageData = new ImageData
@@ -34,8 +36,9 @@ public class ImageDataServiceTests
             Name = imageName,
             Data = bytes,
             ExternalId = "externalIdTest"
-        };
-        
+        }; 
+        mockValidator.Setup(x => x.Validate(imageData)).Returns(Result.Success);
+
         // Act
         var saved = await imageDataService.Save(imageData);
         var images = await dbContext.ImageDatas.ToListAsync();
@@ -63,7 +66,8 @@ public class ImageDataServiceTests
         using var dbContext = new ApplicationDbContext(options);
         var mockLogger = new Mock<ILogger<ImageDataService>>();
         var imageProcessingService = new ImageProcessingService();
-        var imageDataService = new ImageDataService(dbContext, mockLogger.Object, imageProcessingService);
+        var mockValidator = new Mock<IValidator<ImageData>>();
+        var imageDataService = new ImageDataService(dbContext, mockLogger.Object, imageProcessingService, mockValidator.Object);
         var imageName = Path.Combine(Directory.GetCurrentDirectory(), "Assets/seed-image.jpeg");
         var bytes = await File.ReadAllBytesAsync(imageName);
         var imageData = new ImageData
@@ -80,7 +84,9 @@ public class ImageDataServiceTests
             Data = bytesForUpdate,
             ExternalId = "externalIdTest"
         };
-        
+        mockValidator.Setup(x => x.Validate(imageData)).Returns(Result.Success);
+
+
         // Act
         var saved = await imageDataService.Save(imageData);
         
@@ -95,7 +101,8 @@ public class ImageDataServiceTests
         using var dbContext = new ApplicationDbContext(options);
         var mockLogger = new Mock<ILogger<ImageDataService>>();
         var imageProcessingService = new ImageProcessingService();
-        var imageDataService = new ImageDataService(dbContext, mockLogger.Object, imageProcessingService);
+        var mockValidator = new Mock<IValidator<ImageData>>();
+        var imageDataService = new ImageDataService(dbContext, mockLogger.Object, imageProcessingService, mockValidator.Object);
         var imageName = Path.Combine(Directory.GetCurrentDirectory(), "Assets/seed-image.jpeg");
         var bytes = await File.ReadAllBytesAsync(imageName);
         var imageData = new ImageData
@@ -104,7 +111,8 @@ public class ImageDataServiceTests
             Data = bytes,
             ExternalId = "externalIdTest"
         };
-        
+        mockValidator.Setup(x => x.Validate(imageData)).Returns(Result.Success);
+
         // Act
         var saved = await imageDataService.Save(imageData);
         var imagesBeforeDelete = await dbContext.ImageDatas.ToListAsync(); 

@@ -1,14 +1,13 @@
 using CoffeePalace.Models.Entities;
 using CoffeePalace.Services.Common;
-using FluentValidation;
 
 using static CoffeePalace.Models.Constants.CoffeeProductConstants;
 
 namespace CoffeePalace.Services.Validators;
 
-public static class CoffeeProductValidator
+public class CoffeeProductValidator : IValidator<CoffeeProduct>
 {
-    public static Result Validate(CoffeeProduct coffeeProduct)
+    public Result Validate(CoffeeProduct coffeeProduct)
     {
         try
         {
@@ -25,7 +24,7 @@ public static class CoffeeProductValidator
         }
     }
 
-    private static void ValidateName(string name)
+    private void ValidateName(string name)
     {
         var nameProp = nameof(CoffeeProduct.Name);
         
@@ -37,7 +36,7 @@ public static class CoffeeProductValidator
             throw new Exception(ErrorMessageBuilder.MaxLen(nameProp, NameMaxLen));
     }
 
-    private static void ValidateDescription(string description)
+    private void ValidateDescription(string description)
     {
         var nameProp = nameof(CoffeeProduct.Description);
         
@@ -49,7 +48,7 @@ public static class CoffeeProductValidator
             throw new Exception(ErrorMessageBuilder.MaxLen(nameProp, MaxDescriptionLen));
     }
     
-    private static void ValidateCountryOfOrigin(string countryOfOrigin)
+    private void ValidateCountryOfOrigin(string countryOfOrigin)
     {
         var nameProp = nameof(CoffeeProduct.CountryOfOrigin);
         
@@ -61,7 +60,7 @@ public static class CoffeeProductValidator
             throw new Exception(ErrorMessageBuilder.MaxLen(nameProp, MaxCountryOfOriginLen));
     }
 
-    private static void ValidatePrice(decimal price)
+    private void ValidatePrice(decimal price)
     {
         var nameProp = nameof(CoffeeProduct.Price);
 

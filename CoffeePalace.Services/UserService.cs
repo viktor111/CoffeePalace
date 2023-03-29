@@ -11,18 +11,24 @@ public class UserService : IUserService
 {
     private readonly ApplicationDbContext dbContext;
     private readonly ILogger<UserService> logger;
+    private readonly IValidator<User> userValidator;
 
-    public UserService(ApplicationDbContext dbContext, ILogger<UserService> logger)
+    public UserService(
+        ApplicationDbContext dbContext, 
+        ILogger<UserService> logger,
+        IValidator<User> userValidator
+        )
     {
         this.dbContext = dbContext;
         this.logger = logger;
+        this.userValidator = userValidator;
     }
 
     public async Task<Result<User>> Save(User user)
     {
         try
         {
-            var validation = UserValidator.Validate(user);
+            var validation = this.userValidator.Validate(user);
             if (!validation.Succeeded) return validation.Errors.First();
             
             var result = await this.dbContext.Users.AddAsync(user);

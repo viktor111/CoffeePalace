@@ -12,22 +12,25 @@ public class ImageDataService : IImageDataService
     private readonly ApplicationDbContext dbContext;
     private readonly ILogger<ImageDataService> logger;
     private readonly IImageProcessingService imageProcessingService;
+    private readonly IValidator<ImageData> imageDataValidator;
 
     public ImageDataService(
         ApplicationDbContext dbContext,
         ILogger<ImageDataService> logger,
-        IImageProcessingService imageProcessingService)
+        IImageProcessingService imageProcessingService,
+        IValidator<ImageData> imageDataValidator)
     {
         this.dbContext = dbContext;
         this.logger = logger;
         this.imageProcessingService = imageProcessingService;
+        this.imageDataValidator = imageDataValidator;
     }
 
     public async Task<Result<ImageData>> Save(ImageData imageData)
     {
         try
         {
-            var isValid = ImageDataValidator.Validate(imageData);
+            var isValid = this.imageDataValidator.Validate(imageData);
             if (!isValid.Succeeded) return isValid.Errors.First();
             
             var processedImage = await this.imageProcessingService.Process(imageData);
@@ -51,7 +54,7 @@ public class ImageDataService : IImageDataService
     {
         try
         {
-            var isValid = ImageDataValidator.Validate(imageData);
+            var isValid = this.imageDataValidator.Validate(imageData);
             if (!isValid.Succeeded) return isValid.Errors.First();
             
             var old = await this.dbContext.ImageDatas

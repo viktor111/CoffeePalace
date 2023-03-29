@@ -44,7 +44,7 @@ public class Seeder
         {
             await this.dbContext.CoffeeProducts.AddAsync(product);
 
-            var imageName = Path.Combine(Directory.GetCurrentDirectory(), "Assets/seed-image.jpeg");
+            var imageName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\seed-image.jpeg");
             
             var bytes = await File.ReadAllBytesAsync(imageName);
 

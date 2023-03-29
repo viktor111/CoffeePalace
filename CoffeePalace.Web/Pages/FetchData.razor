@@ -3,6 +3,7 @@
 @using CoffeePalace.Services.Dtos
 @using CoffeePalace.Services
 @inject IWebHostEnvironment WebHostEnvironment
+@inject ICountriesService CountriesService
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -22,8 +23,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var countryService = new CountriesService(Path.Combine(WebHostEnvironment.WebRootPath, "countries.json"));
-        countries = countryService.GetAllCountries().ToList();
+        countries = CountriesService.GetAllCountries().ToList();
     }
 
 }
