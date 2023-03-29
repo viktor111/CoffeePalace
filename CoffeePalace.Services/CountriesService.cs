@@ -1,4 +1,6 @@
 using CoffeePalace.Services.Dtos;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 
 namespace CoffeePalace.Services;
@@ -7,8 +9,9 @@ public class CountriesService : ICountriesService
 {
     private readonly List<CountryDto> countries;
 
-    public CountriesService(string path)
+    public CountriesService(IWebHostEnvironment WebHostEnvironment)
     {
+        var path = Path.Combine(WebHostEnvironment.WebRootPath, "countries.json");
         this.countries = JsonConvert.DeserializeObject<List<CountryDto>>(File.ReadAllText(path))
                          ?? throw new Exception("Countries list is empty!");
     }

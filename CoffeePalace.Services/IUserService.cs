@@ -12,4 +12,6 @@ public interface IUserService
     public Task<Result> Delete(string id);
     
     public Task<Result<IEnumerable<User>>> All();
+
+    public Task<Result<User>> GetById(string id);
 }

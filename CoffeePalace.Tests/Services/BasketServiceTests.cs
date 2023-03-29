@@ -20,10 +20,10 @@ public class BasketServiceTests
             .UseInMemoryDatabase(databaseName: "TestDatabase")
             .Options;
 
-        using var dbContext = new ApplicationDbContext(options);
+       /* using var dbContext = new ApplicationDbContext(options);
         var seeder = new Seeder(dbContext);
 
-        seeder.Seed().GetAwaiter().GetResult();
+        seeder.Seed().GetAwaiter().GetResult();*/
     }
 
     [Fact]

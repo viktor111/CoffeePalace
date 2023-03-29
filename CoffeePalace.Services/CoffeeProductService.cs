@@ -11,18 +11,24 @@ public class CoffeeProductService : ICoffeeProductService
 {
     private readonly ApplicationDbContext dbContext;
     private readonly ILogger<CoffeeProductService> logger;
-    
-    public CoffeeProductService(ApplicationDbContext dbContext, ILogger<CoffeeProductService> logger)
+    private readonly IValidator<CoffeeProduct> coffeeProductValidator;
+
+    public CoffeeProductService(
+        ApplicationDbContext dbContext,
+        ILogger<CoffeeProductService> logger,
+        IValidator<CoffeeProduct> coffeeProductValidator
+        )
     {
         this.dbContext = dbContext;
         this.logger = logger;
+        this.coffeeProductValidator = coffeeProductValidator;
     }
 
     public async Task<Result<CoffeeProduct>> Save(CoffeeProduct coffeeProduct)
     {
         try
         {
-            var validation = CoffeeProductValidator.Validate(coffeeProduct);
+            var validation = this.coffeeProductValidator.Validate(coffeeProduct);
             if (!validation.Succeeded) return validation.Errors.First();
             
             var result = await this.dbContext.CoffeeProducts.AddAsync(coffeeProduct);
@@ -42,7 +48,7 @@ public class CoffeeProductService : ICoffeeProductService
     {
         try
         {
-            var validation = CoffeeProductValidator.Validate(coffeeProduct);
+            var validation = this.coffeeProductValidator.Validate(coffeeProduct);
             if (!validation.Succeeded) return validation.Errors.First();
             
             var old = await dbContext.CoffeeProducts
@@ -104,6 +110,24 @@ public class CoffeeProductService : ICoffeeProductService
         {
             this.logger.LogError("{@e}", e);
             return ErrorMessageBuilder.All(nameof(CoffeeProduct));
+        }
+    }
+
+    public async Task<Result<CoffeeProduct>> GetById(string id)
+    {
+        try
+        {
+            var coffeeProduct = await this.dbContext.CoffeeProducts.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (coffeeProduct == null)
+                return ErrorMessageBuilder.Get(nameof(CoffeeProduct));
+
+            return coffeeProduct;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("{@e}", e);
+            return ErrorMessageBuilder.Get(nameof(CoffeeProduct));
         }
     }
 }

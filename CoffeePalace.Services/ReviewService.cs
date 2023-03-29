@@ -11,18 +11,24 @@ public class ReviewService : IReviewService
 {
     private readonly ApplicationDbContext dbContext;
     private readonly ILogger<ReviewService> logger;
+    private readonly IValidator<Review> reviewValidator;
 
-    public ReviewService(ApplicationDbContext dbContext, ILogger<ReviewService> logger)
+    public ReviewService(
+        ApplicationDbContext dbContext,
+        ILogger<ReviewService> logger,
+        IValidator<Review> reviewValidator
+        )
     {
         this.dbContext = dbContext;
         this.logger = logger;
+        this.reviewValidator = reviewValidator;
     }
 
     public async Task<Result<Review>> Save(Review review)
     {
         try
         {
-            var validation = ReviewValidator.Validate(review);
+            var validation = this.reviewValidator.Validate(review);
             if (!validation.Succeeded) return validation.Errors.First();
             
             var result = await this.dbContext.Reviews.AddAsync(review);
@@ -42,7 +48,7 @@ public class ReviewService : IReviewService
     {
         try
         {
-            var validation = ReviewValidator.Validate(review);
+            var validation = this.reviewValidator.Validate(review);
             if (!validation.Succeeded) return validation.Errors.First();
             
             var old = await this.dbContext.Reviews
@@ -100,6 +106,24 @@ public class ReviewService : IReviewService
         {
             this.logger.LogInformation("{@e}", e);
             return ErrorMessageBuilder.All(nameof(Review));
+        }
+    }
+
+    public async Task<Result<Review>> GetById(string id)
+    {
+        try
+        {
+            var review = await this.dbContext.Reviews.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (review == null)
+                return ErrorMessageBuilder.Get(nameof(Review));
+
+            return review;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("{@e}", e);
+            return ErrorMessageBuilder.Get(nameof(Review));
         }
     }
 }

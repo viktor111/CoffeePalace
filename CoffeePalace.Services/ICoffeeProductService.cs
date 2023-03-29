@@ -12,4 +12,6 @@ public interface ICoffeeProductService
     public Task<Result> Delete(string id);
 
     public Task<Result<IEnumerable<CoffeeProduct>>> All();
+
+    public Task<Result<CoffeeProduct>> GetById(string id);
 }

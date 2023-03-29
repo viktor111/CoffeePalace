@@ -1,14 +1,22 @@
 using CoffeePalace.Models.Entities;
 using CoffeePalace.Models.Types;
 using CoffeePalace.Services.Common;
+using Microsoft.AspNetCore.Hosting;
 
 using static CoffeePalace.Models.Constants.UserConstants;
 
 namespace CoffeePalace.Services.Validators;
 
-public static class UserValidator
+public class UserValidator : IValidator<User>
 {
-    public static Result Validate(User user)
+    private readonly ICountriesService countriesService;
+
+    public UserValidator(ICountriesService countriesService)
+    {
+        this.countriesService = countriesService;
+    }
+
+    public Result Validate(User user)
     {
         try
         {
@@ -29,7 +37,7 @@ public static class UserValidator
         }
     }
 
-    private static void ValidateFirstName(string firstName)
+    private void ValidateFirstName(string firstName)
     {
         var nameProp = nameof(User.FirstName);
 
@@ -41,7 +49,7 @@ public static class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxFirstNameLen));
     }
 
-    private static void ValidateLastName(string lastName)
+    private void ValidateLastName(string lastName)
     {
         var nameProp = nameof(User.LastName);
 
@@ -53,7 +61,7 @@ public static class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxLastnameLen));
     }
 
-    private static void ValidateAddress(string address)
+    private void ValidateAddress(string address)
     {
         var nameProp = nameof(User.Address);
 
@@ -65,7 +73,7 @@ public static class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxAddressLen));
     }
 
-    private static void ValidateCountry(string country)
+    private void ValidateCountry(string country)
     {
         var nameProp = nameof(User.Country);
 
@@ -76,13 +84,11 @@ public static class UserValidator
         if (country.Length > MaxCountryLen)
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxCountryLen));
 
-        var validCountries = CountriesList.GetCountryNamesToLower();
-
-        if (!validCountries.Contains(country.ToLower()))
+        if (!this.countriesService.IsCountryNameValid(country))
             throw new Exception(ErrorMessageBuilder.NotFound(nameProp));
     }
 
-    private static void ValidateCity(string city)
+    private void ValidateCity(string city)
     {
         var nameProp = nameof(User.City);
 
@@ -94,7 +100,7 @@ public static class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxCityLen));
     }
 
-    private static void ValidatePhoneNumber(string phoneNumber)
+    private void ValidatePhoneNumber(string phoneNumber)
     {
         var nameProp = nameof(User.PhoneNumber);
 
@@ -106,7 +112,7 @@ public static class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxPhoneNumberLen));
     }
 
-    private static void ValidateEmail(string email)
+    private void ValidateEmail(string email)
     {
         var nameProp = nameof(User.Email);
 
@@ -118,7 +124,7 @@ public static class UserValidator
             throw new Exception(ErrorMessageBuilder.MinLen(nameProp, MaxEmailLen));
     }
 
-    private static void ValidatePassword(string password)
+    private void ValidatePassword(string password)
     {
         var nameProp = nameof(User.Password);
 

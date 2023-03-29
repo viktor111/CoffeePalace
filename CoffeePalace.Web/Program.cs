@@ -23,7 +23,7 @@ if (dbContext is null) throw new Exception("During startup dbContext was null");
 
 var seeder = new Seeder(dbContext);
 
-seeder.Seed();
+await seeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

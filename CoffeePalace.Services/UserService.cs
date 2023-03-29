@@ -11,18 +11,24 @@ public class UserService : IUserService
 {
     private readonly ApplicationDbContext dbContext;
     private readonly ILogger<UserService> logger;
+    private readonly IValidator<User> userValidator;
 
-    public UserService(ApplicationDbContext dbContext, ILogger<UserService> logger)
+    public UserService(
+        ApplicationDbContext dbContext, 
+        ILogger<UserService> logger,
+        IValidator<User> userValidator
+        )
     {
         this.dbContext = dbContext;
         this.logger = logger;
+        this.userValidator = userValidator;
     }
 
     public async Task<Result<User>> Save(User user)
     {
         try
         {
-            var validation = UserValidator.Validate(user);
+            var validation = this.userValidator.Validate(user);
             if (!validation.Succeeded) return validation.Errors.First();
             
             var result = await this.dbContext.Users.AddAsync(user);
@@ -102,6 +108,24 @@ public class UserService : IUserService
         {
             this.logger.LogError("{@e}", e);
             return ErrorMessageBuilder.All(nameof(User));
+        }
+    }
+
+    public async Task<Result<User>> GetById(string id)
+    {
+        try
+        {
+            var users = await this.dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (users == null)
+                return ErrorMessageBuilder.Get(nameof(User));
+
+            return users;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("{@e}", e);
+            return ErrorMessageBuilder.Get(nameof(User));
         }
     }
 }
